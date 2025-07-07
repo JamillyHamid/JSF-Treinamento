@@ -1,0 +1,111 @@
+<ui:composition template="/WEB-INF/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Cadastro de Evento
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formCadastro">
+            <!-- Inclui o modal (confirmarModel.xhtml) para reutilização -->
+            <ui:include src="/model/confirmarModel.xhtml" >
+                <ui:param name="modalBean" value="#{cadastroEventoBean}"/>
+            </ui:include>
+
+            <p:panel header="Formulário de Cadastro" style="width:600px;">
+                <!-- Mensagens gerais de erro -->
+                <p:messages showDetail="true" closable="true" />
+
+                <!-- Formulário com painel de duas colunas -->
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1em;">
+
+                    <p:outputLabel for="nomeEvento" value="Nome do Evento:"
+                                   style="text-align: left; white-space: nowrap;" />
+                    <p:inputText id="nomeEvento" value="#{cadastroEventoBean.cadastrarEvento.nomeEvento}"
+                                 style="width:100%;" />
+
+                    <p:outputLabel for="data" value="Data do Evento:" styleClass="label" />
+                    <p:calendar id="data" value="#{cadastroEventoBean.cadastrarEvento.data}"
+                                pattern="dd/MM/yyyy" showIcon="true" />
+
+                    <p:outputLabel for="descricaoEvento" value="Descrição do Evento:" style="text-align: left; white-space: nowrap;" />
+                    <p:inputText id="descricaoEvento" value="#{cadastroEventoBean.cadastrarEvento.descricaoEvento}" style="width:100%;" />
+
+                    <p:outputLabel for="tipoDocumento" value="Tipo de Documento:" styleClass="label" />
+                    <p:selectOneMenu id="tipoDocumento" value="#{cadastroEventoBean.cadastrarEvento.tipoDocumento}"
+                                     style="width:100%;">
+                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="CPF" itemValue="CPF" />
+                        <f:selectItem itemLabel="CNPJ" itemValue="CNPJ" />
+                        <p:ajax update="docPanel" process="@this" />
+                    </p:selectOneMenu>
+
+                    <!-- Bloco para CPF / CNPJ -->
+                    <h:panelGroup id="docPanel" layout="block">
+                        <!-- Campo CPF -->
+                        <p:outputLabel for="cpf" value="CPF:" styleClass="label"
+                                       rendered="#{cadastroEventoBean.cadastrarEvento.tipoDocumento eq 'CPF'}" />
+                        <p:inputMask id="cpf" value="#{cadastroEventoBean.cadastrarEvento.numeroCPF}"
+                                     mask="999.999.999-99" autoClear="true" unmask="true"
+                                     rendered="#{cadastroEventoBean.cadastrarEvento.tipoDocumento eq 'CPF'}"
+                                     style="width:100%;" />
+
+                        <!-- Campo CNPJ -->
+                        <p:outputLabel for="cnpj" value="CNPJ:" styleClass="label"
+                                       rendered="#{cadastroEventoBean.cadastrarEvento.tipoDocumento eq 'CNPJ'}" />
+                        <p:inputMask id="cnpj" value="#{cadastroEventoBean.cadastrarEvento.numeroCNPJ}"
+                                     mask="99.999.999/9999-99" autoClear="true" unmask="true"
+                                     rendered="#{cadastroEventoBean.cadastrarEvento.tipoDocumento eq 'CNPJ'}"
+                                     style="width:100%;" />
+                    </h:panelGroup>
+                </p:panelGrid>
+
+                <p:separator/>
+
+                <p:commandButton value="Limpar"
+                                 action="#{cadastroEventoBean.limpar}"
+                                 update="@form"
+                                 icon="pi pi-refresh"
+                                 styleClass="ui-button-secondary"
+                />
+
+                <p:commandButton value="Salvar"
+                                 action="#{cadastroEventoBean.validarCampos}"
+                                 update="@form"
+                                 icon="pi pi-save"
+                                 ajax="true"
+                />
+
+            </p:panel>
+
+            <!-- Diálogo para exibir a lista de campos não preenchidos -->
+            <p:dialog widgetVar="errorDialog" header="Campos não preenchidos"
+                      modal="true" closable="false" resizable="false">
+                <h:outputText value="#{cadastroEventoBean.errorMessage}" escape="false" />
+                <f:facet name="footer">
+                    <p:commandButton value="Fechar"
+                                     onclick="PF('errorDialog').hide();"
+                                     type="button" />
+                </f:facet>
+            </p:dialog>
+            <!-- Diaglogo de sucesso-->
+            <p:dialog widgetVar="successDialog" header="Sucesso"
+                      modal="true" closable="false" resizable="false">
+                <h:outputText value="Cadastro realizado com sucesso!" />
+                <f:facet name="footer">
+                    <p:commandButton value="Ok"
+                                     onclick="PF('successDialog').hide(); window.location='#{request.contextPath}/evento/main.xhtml';"
+                                     type="button" />
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer">
+        Rodapé – Página de Cadastro
+    </ui:define>
+</ui:composition>

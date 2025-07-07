@@ -1,0 +1,73 @@
+<ui:composition template="/WEB-INF/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Exclusão de Pessoa
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formExclusao">
+            <!-- Inclui o modal de confirmação para exclusão (confirmarModel.xhtml atualizado) -->
+            <ui:include src="/model/confirmarExclusaoModel.xhtml">
+                <ui:param name="modalBean" value="#{consultaEventoBean}" />
+            </ui:include>
+
+            <p:panel header="Formulário de Exclusão" style="width:600px;">
+                <!-- Mensagens Gerais -->
+                <p:messages showDetail="true" closable="true" />
+
+                <!-- Painel de Dados da Pessoa (somente leitura) -->
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1em;">
+                    <p:outputLabel for="nome" value="Nome Completo:" style="text-align:left; white-space:nowrap;" />
+                    <h:outputText id="nome" value="#{consultaEventoBean.eventoSelecionado.nomeEvento}" />
+
+                    <p:outputLabel for="email" value="Descrição:" />
+                    <h:outputText id="email" value="#{consultaEventoBean.eventoSelecionado.descricaoEvento}" />
+
+                    <p:outputLabel for="data" value="Data do Evento:" />
+                    <h:outputText id="data">
+                        <f:convertDateTime pattern="dd/MM/yyyy" value="#{consultaEventoBean.eventoSelecionado.data}" />
+                    </h:outputText>
+
+                    <p:outputLabel for="tipo" value="Tipo de Documento:" />
+                    <h:outputText id="tipo" value="#{consultaEventoBean.eventoSelecionado.tipoDocumento}" />
+
+                    <p:outputLabel for="doc" value="Documento:" />
+                    <h:outputText id="doc"
+                                  value="#{consultaEventoBean.eventoSelecionado.tipoDocumento eq 'CPF' ?
+                                           consultaEventoBean.eventoSelecionado.numeroCPF :
+                                           consultaEventoBean.eventoSelecionado.numeroCNPJ}" />
+                </p:panelGrid>
+
+                <p:separator />
+
+                <!-- Botões de Ação -->
+                <p:commandButton value="Limpar" action="#{consultaEventoBean.limparAlteracoes}" update="@form"
+                                 icon="pi pi-refresh" styleClass="ui-button-secondary" />
+
+                <!-- Botão que abre o modal de confirmação (nosso novo modal usa widgetVar 'exclusionConfirmDialog') -->
+                <p:commandButton value="Excluir" onclick="PF('exclusionConfirmDialog').show(); return false;"
+                                 icon="pi pi-trash" styleClass="ui-button-danger" />
+            </p:panel>
+
+            <!-- Modal de Sucesso para Exclusão -->
+            <p:dialog widgetVar="successDialog" header="Sucesso"
+                      modal="true" closable="false" resizable="false">
+                <h:outputText value="Exclusão realizada com sucesso!" />
+                <f:facet name="footer">
+                    <p:commandButton value="Ok"
+                                     onclick="PF('successDialog').hide(); window.location='#{request.contextPath}/evento/main.xhtml';"
+                                     type="button" />
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer">
+        Rodapé – Exclusão de Pessoa
+    </ui:define>
+</ui:composition>
