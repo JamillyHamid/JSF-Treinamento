@@ -86,7 +86,13 @@ public class EventoVO implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         EventoVO eventoVO = (EventoVO) o;
-        return Objects.equals(id, eventoVO.id) && Objects.equals(nomeEvento, eventoVO.nomeEvento) && Objects.equals(data, eventoVO.data) && Objects.equals(descricaoEvento, eventoVO.descricaoEvento) && Objects.equals(tipoDocumento, eventoVO.tipoDocumento) && Objects.equals(numeroCPF, eventoVO.numeroCPF) && Objects.equals(numeroCNPJ, eventoVO.numeroCNPJ);
+        return Objects.equals(id, eventoVO.id)
+                && Objects.equals(nomeEvento, eventoVO.nomeEvento)
+                && Objects.equals(data, eventoVO.data)
+                && Objects.equals(descricaoEvento, eventoVO.descricaoEvento)
+                && Objects.equals(tipoDocumento, eventoVO.tipoDocumento)
+                && Objects.equals(numeroCPF, eventoVO.numeroCPF)
+                && Objects.equals(numeroCNPJ, eventoVO.numeroCNPJ);
     }
 
     @Override

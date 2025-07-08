@@ -117,7 +117,16 @@ public class PessoaVO implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PessoaVO pessoaVO = (PessoaVO) o;
-        return Objects.equals(id, pessoaVO.id) && Objects.equals(nome, pessoaVO.nome) && Objects.equals(idade, pessoaVO.idade) && Objects.equals(email, pessoaVO.email) && Objects.equals(data, pessoaVO.data) && Objects.equals(tipoDocumento, pessoaVO.tipoDocumento) && Objects.equals(numeroCPF, pessoaVO.numeroCPF) && Objects.equals(numeroCNPJ, pessoaVO.numeroCNPJ) && Objects.equals(dataManutencao, pessoaVO.dataManutencao) && Objects.equals(ativo, pessoaVO.ativo);
+        return Objects.equals(id, pessoaVO.id)
+                && Objects.equals(nome, pessoaVO.nome)
+                && Objects.equals(idade, pessoaVO.idade)
+                && Objects.equals(email, pessoaVO.email)
+                && Objects.equals(data, pessoaVO.data)
+                && Objects.equals(tipoDocumento, pessoaVO.tipoDocumento)
+                && Objects.equals(numeroCPF, pessoaVO.numeroCPF)
+                && Objects.equals(numeroCNPJ, pessoaVO.numeroCNPJ)
+                && Objects.equals(dataManutencao, pessoaVO.dataManutencao)
+                && Objects.equals(ativo, pessoaVO.ativo);
     }
 
     @Override

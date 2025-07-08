@@ -8,8 +8,8 @@ import org.primefaces.component.export.ExcelOptions;
 import org.primefaces.component.export.PDFOptions;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @ManagedBean(name = "consultaEventoBean")
-@ViewScoped
+@SessionScoped
 public class ConsultaEventoBean implements Serializable {
 
     private List<Evento> eventos;
@@ -27,6 +27,7 @@ public class ConsultaEventoBean implements Serializable {
     private transient PDFOptions pdfOpt;
     private transient ExcelOptions excelOpt;
     private Boolean tpAtualizacao;
+    private String mensagem;
 
     private transient EventoService eventoService = new EventoServiceImpl();
 
@@ -86,6 +87,14 @@ public class ConsultaEventoBean implements Serializable {
         return excelOpt;
     }
 
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
     @PostConstruct
     public void init() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -133,12 +142,15 @@ public class ConsultaEventoBean implements Serializable {
 
     public void prepararEdicao(Evento evento) {
         this.eventoSelecionado = evento;
-        System.out.println("Evento recebido: " + evento.getNomeEvento());
     }
 
     public String prepararExclusao(Evento evento) {
         this.eventoSelecionado = evento;
         return "excluir?faces-redirect=true&eventoId=" + evento.getId() + "&tpAtualizacao=false";
+    }
+
+    public void prepararHome(Evento evento) {
+        this.eventoSelecionado = evento;
     }
 
     public String atualizarConsulta() {
@@ -191,6 +203,11 @@ public class ConsultaEventoBean implements Serializable {
             errorMessage = "Erro ao excluir Evento:" + e.getMessage();
             PrimeFaces.current().executeScript("PF('errorDialog').show()");
         }
+    }
+
+    public String enviarMensagem() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("mensagem", mensagem);
+        return "/home.xhtml?faces-redirect=true";
     }
 
     public void validarCampos() {

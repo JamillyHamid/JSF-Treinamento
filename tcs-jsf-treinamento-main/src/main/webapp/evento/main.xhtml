@@ -96,9 +96,19 @@
                         </div>
                     </div>
                 </div>
+
+                <p:commandButton value="Escrever Mensagem"
+                                 icon="pi pi-comment"
+                                 styleClass="ui-button-info"
+                                 onclick="PF('mensagemDialog').show(); return false;" />
+
             </p:panel>
 
             <ui:include src="/model/alterarEventoModal.xhtml">
+                <ui:param name="modalBean" value="#{consultaEventoBean}" />
+            </ui:include>
+
+            <ui:include src="/model/mensagemModel.xhtml">
                 <ui:param name="modalBean" value="#{consultaEventoBean}" />
             </ui:include>
         </h:form>
